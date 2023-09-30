@@ -2,30 +2,34 @@ import { NavLink } from "react-router-dom";
 import useUser from "../hooks/useUser";
 
 const Navbar = () => {
-  const { name, age } = useUser();
+  const { user, logOut } = useUser();
 
-  console.log(name, age);
+  const handleLogOut = () => {
+    logOut()
+      .then(() => console.log("log out successfully"))
+      .catch((error) => console.log(error));
+  };
 
   const navbarLi = (
     <>
-      <NavLink
-        className="font-semibold mr-5 hover:bg-slate-700 px-6 py-2 rounded-md"
-        to="/"
-      >
-        Home
-      </NavLink>
-      <NavLink
-        className="font-semibold mr-5 hover:bg-slate-700 px-6 py-2 rounded-md"
-        to="/register"
-      >
-        Register
-      </NavLink>
-      <NavLink
-        className="font-semibold mr-5 hover:bg-slate-700 px-6 py-2 rounded-md"
-        to="/login"
-      >
-        Login
-      </NavLink>
+      <li>
+        <NavLink to="/">Home</NavLink>
+      </li>
+      <li>
+        <NavLink to="/register">Register</NavLink>
+      </li>
+      <li>
+        <NavLink to="/orders">Orders</NavLink>
+      </li>
+      {user ? (
+        <button onClick={handleLogOut} className="btn btn-sm">
+          Log out
+        </button>
+      ) : (
+        <li>
+          <NavLink to="/login">Login</NavLink>
+        </li>
+      )}
     </>
   );
   return (
@@ -59,7 +63,7 @@ const Navbar = () => {
         <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
       </div>
       <div className="navbar-center">
-        <p>Hello, {name}</p>
+        <p>Hello, {user ? <span>{user.email}</span> : <span>unknown</span>}</p>
       </div>
       <div className="navbar-end hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{navbarLi}</ul>
